@@ -50,3 +50,9 @@ class TestAddPerson(TestCase):
             len(simulate_db_persons()) + 1,
             len(addperson(Person(name="Kurt", age=42))),
         )
+
+    def test_person_real_person(self) -> None:
+        """test added Person is real"""
+        person = Person(name="Tom", age=91)
+        persons = addperson(person)
+        self.assertEqual(persons[-1], person)

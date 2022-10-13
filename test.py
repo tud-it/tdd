@@ -2,7 +2,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from server import Person, get_person, simulate_db_persons
+from server import Person, addperson, get_person, simulate_db_persons
 
 
 class TestServerFunctions(TestCase):
@@ -45,7 +45,8 @@ class TestAddPerson(TestCase):
     """add Person"""
 
     def test_list_len(self) -> None:
+        """test länge"""
         self.assertEqual(
-            len(simulate_db_persons()),
-            len(addPerson(Person(name="Kurt", age=42))),
+            len(simulate_db_persons()) + 1,
+            len(addperson(Person(name="Kurt", age=42))),
         )

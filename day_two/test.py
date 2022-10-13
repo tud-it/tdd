@@ -2,7 +2,7 @@
 from unittest import TestCase
 from unittest.mock import patch
 
-from server import Person, get_person, simulate_db_persons
+from server import Person, add_person, get_person, simulate_db_persons
 
 
 class TestServerFunctions(TestCase):
@@ -22,7 +22,6 @@ class TestServerFunctions(TestCase):
 
             got = get_person()
 
-
             self.assertListEqual(
                 expected,
                 got,
@@ -39,5 +38,11 @@ class TestSimulateDBPersons(TestCase):
         persons_str: list[str] = []
         for person in persons:
             persons_str.append(f"{person.name}, {person.age}\n")
-        with open ("database", encoding="utf-8") as file:
+        with open("database", encoding="utf-8") as file:
             self.assertListEqual(list(file), persons_str)
+
+    def test_add_person(self) -> None:
+        """SSS"""
+        temp = Person(name="Peter", age=18)
+
+        self.assertEqual(len(simulate_db_persons()) + 1, len(add_person(temp)))

@@ -26,6 +26,13 @@ def simulate_db_persons() -> list:
     return persons
 
 
+def addperson(person: Person) -> list:
+    """Person hinzufügen"""
+    persons = simulate_db_persons()
+    persons.append(person)
+    return persons
+
+
 def get_person() -> list[Person]:
     """a really nice docstring"""
     return simulate_db_persons()

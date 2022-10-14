@@ -46,3 +46,9 @@ class TestSimulateDBPersons(TestCase):
         temp = Person(name="Peter", age=18)
 
         self.assertEqual(len(simulate_db_persons()) + 1, len(add_person(temp)))
+
+    def test_is_same_person(self) -> None:
+        """ss"""
+        temp = Person(name="Peter", age=18)
+        temp2 = add_person(temp)
+        self.assertEqual(temp2[-1], temp)

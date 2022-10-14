@@ -4,10 +4,10 @@ from unittest.mock import patch
 
 from server import (
     Person,
-    get_person,
-    simulate_db_persons,
     addperson,
     changeperson,
+    get_person,
+    simulate_db_persons,
 )
 
 

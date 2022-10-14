@@ -33,6 +33,13 @@ def addperson(person: Person) -> list:
     return persons
 
 
+def changeperson(person: Person, ind: int) -> list:
+    """Person name änderung"""
+    persons = simulate_db_persons()
+    persons[ind] = person
+    return persons
+
+
 def get_person() -> list[Person]:
     """a really nice docstring"""
     return simulate_db_persons()

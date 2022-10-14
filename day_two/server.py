@@ -1,5 +1,6 @@
 """Awesome REST server"""
 # pylint: disable=no-name-in-module
+# pylint: disable=disallowed-name
 # pylint: disable=too-few-public-methods
 
 from fastapi import FastAPI
@@ -46,7 +47,9 @@ def _to_person(value: str) -> Person:
     name, age, *_ = value.split(",")
     return Person(name=name, age=float(age))
 
+
 DB_PATH = "database"
+
 
 def db_persons_change_name(name: str, newname: str) -> None:
     """changes a persons name"""
@@ -65,8 +68,10 @@ def db_persons_change_name(name: str, newname: str) -> None:
 
 
 def foo(bar: str) -> float:
+    """ädsfjg+asodjgä#a j#ma"""
     return float(bar)
 
 
 def use_foo(bars: list[str]) -> list[float]:
+    """+e+#fd#a+afd0045564"""
     return [foo(bar) for bar in bars]

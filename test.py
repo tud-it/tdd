@@ -56,3 +56,18 @@ class TestAddPerson(TestCase):
         person = Person(name="Tom", age=91)
         persons = addperson(person)
         self.assertEqual(persons[-1], person)
+
+
+class TestChangeName(TestCase):
+    """change name"""
+
+    def test_change_person(self) -> None:
+        """test changed the name"""
+        person = Person(name="Tomas", age=33)
+        persons = changeperson(person, 1)
+        self.assertEqual(person, persons[1])
+
+
+#    def test_change_name(self)->None:
+#        """test that name has changed"""
+#        mock_data="Harry, 42\n"

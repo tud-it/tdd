@@ -85,7 +85,15 @@ def change_name_factory(
     write_lines: Callable[[list[str]], None],
 ) -> Callable[[str, str], None]:
     def run(name: str, new_name: str):
-        write_lines(["Sue, 33\n"])
+        new_lines: list[str] = []
+        old_lines = get_lines()
+        for line in old_lines:
+            if name in line:
+                _, age = line.split(",")
+                new_lines.append(f"{new_name},{age}")
+            else:
+                new_lines.append(line)
+        write_lines(new_lines)
 
     return run
 
@@ -95,7 +103,14 @@ def change_age_factory(
     write_lines: Callable[[list[str]], None],
 ) -> Callable[[str, int], None]:
     def run(name: str, age: int):
-        ...
+        new_lines: list[str] = []
+        old_lines = get_lines()
+        for line in old_lines:
+            if name in line:
+                new_lines.append(f"{name}, {age}\n")
+            else:
+                new_lines.append(line)
+        write_lines(new_lines)
 
     return run
 
@@ -106,7 +121,8 @@ def change_age_factory(
 # change_name = change_name_factory(read_lines, write_lines)
 # change_age = change_name_factory(read_lines, write_lines)
 
-simulate_db_person = simulate_db_person_factory(_read_from_db_file)
+
+simulate_database_person = simulate_db_person_factory(_read_from_db_file)
 change_name = change_name_factory(_read_from_db_file, _write_to_db_file)
 change_age = change_name_factory(_read_from_db_file, _write_to_db_file)
 

@@ -3,9 +3,11 @@
 
 from unittest import TestCase
 from unittest.mock import Mock, call
+from webbrowser import get
 
 from server import Person
 from server_di import (
+    change_age_factory,
     change_name_factory,
     simulate_db_person_factory,
     use_foo_factory,
@@ -106,39 +108,6 @@ class TestSimulateDBPersonFactory(TestCase):
         )
 
 
-class TestChangeNameFactory(TestCase):
-    """test change_name_factory"""
-
-    def test_change_name(self) -> None:
-        """..."""
-        written_lines: list[str] = []
-
-        def get_lines() -> list[str]:
-            return ["Marry, 33\n"]
-
-        def write_lines(lines: list[str]) -> None:
-            nonlocal written_lines
-            written_lines = lines
-
-        change_name = change_name_factory(get_lines, write_lines)
-        change_name("Marry", "Sue")
-
-        self.assertListEqual(["Sue, 33\n"], written_lines)
-
-    def test_change_name_with_mock(self) -> None:
-        """..."""
-
-        def get_lines() -> list[str]:
-            return ["Marry, 33\n"]
-
-        write_lines = Mock()
-
-        change_name = change_name_factory(get_lines, write_lines)
-        change_name("Marry", "Sue")
-
-        write_lines.assert_called_once_with(["Sue, 33\n"])
-
-
 class TestUseFoo(TestCase):
     """test use_foo"""
 
@@ -180,3 +149,145 @@ class TestUseFoo(TestCase):
         use_foo = use_foo_factory(mock_foo)
         _ = use_foo(["4", "2"])
         mock_foo.assert_has_calls([call("4"), call("2")])
+
+
+class TestChangeNameFactory(TestCase):
+
+    """test change_name_factory"""
+
+    def test_change_name(self) -> None:
+
+        """..."""
+
+        written_lines: list[str] = []
+
+        def get_lines() -> list[str]:
+
+            return ["Marry, 33\n"]
+
+        def write_lines(lines: list[str]) -> None:
+
+            nonlocal written_lines
+
+            written_lines = lines
+
+        change_name = change_name_factory(get_lines, write_lines)
+
+        change_name("Marry", "Sue")
+
+        self.assertListEqual(["Sue, 33\n"], written_lines)
+
+    def test_change_second_name(self) -> None:
+
+        """..."""
+
+        written_lines: list[str] = []
+
+        def get_lines() -> list[str]:
+
+            return ["Harry, 33\n"]
+
+        def write_lines(lines: list[str]) -> None:
+
+            nonlocal written_lines
+
+            written_lines = lines
+
+        change_name = change_name_factory(get_lines, write_lines)
+
+        change_name("Harry", "Potter")
+
+        self.assertListEqual(["Potter, 33\n"], written_lines)
+
+    def test_change_one_of_two_names(self) -> None:
+
+        """..."""
+
+        written_lines: list[str] = []
+
+        def get_lines() -> list[str]:
+
+            return ["Harry, 23\n", "Marry, 33\n"]
+
+        def write_lines(lines: list[str]) -> None:
+
+            nonlocal written_lines
+
+            written_lines = lines
+
+        change_name = change_name_factory(get_lines, write_lines)
+
+        change_name("Harry", "Potter")
+
+        self.assertListEqual(["Potter, 23\n", "Marry, 33\n"], written_lines)
+
+
+class TestChangeAgeFactory(TestCase):
+
+    """test change_age_factory"""
+
+    def test_change_age(self) -> None:
+
+        """..."""
+
+        written_lines: list[str] = []
+
+        def get_lines() -> list[str]:
+
+            return ["Marry, 33\n"]
+
+        def write_lines(lines: list[str]) -> None:
+
+            nonlocal written_lines
+
+            written_lines = lines
+
+        change_age = change_age_factory(get_lines, write_lines)
+
+        change_age("Marry", 95)
+
+        self.assertListEqual(["Marry, 95\n"], written_lines)
+
+    def test_change_other_age(self) -> None:
+
+        """..."""
+
+        written_lines: list[str] = []
+
+        def get_lines() -> list[str]:
+
+            return ["Edward, 24\n"]
+
+        def write_lines(lines: list[str]) -> None:
+
+            nonlocal written_lines
+
+            written_lines = lines
+
+        change_age = change_age_factory(get_lines, write_lines)
+
+        change_age("Edward", 42)
+
+        self.assertListEqual(["Edward, 42\n"], written_lines)
+
+    def test_change_one_of_two_ages(self) -> None:
+
+        """..."""
+
+        written_lines: list[str] = []
+
+        def get_lines() -> list[str]:
+
+            return ["Edward, 24\n", "Fridolin, 69\n"]
+
+        def write_lines(lines: list[str]) -> None:
+
+            nonlocal written_lines
+
+            written_lines = lines
+
+        change_age = change_age_factory(get_lines, write_lines)
+
+        change_age("Edward", 42)
+
+        self.assertListEqual(["Edward, 42\n", "Fridolin, 69\n"], written_lines)

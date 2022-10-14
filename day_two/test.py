@@ -1,7 +1,7 @@
 """Testing server.py"""
 import os
-from unittest import TestCase
-from unittest.mock import patch
+from unittest import TestCase, skip
+from unittest.mock import mock_open, patch
 
 from server import (
     Person,
@@ -11,6 +11,7 @@ from server import (
     db_persons_change_name,
     get_person,
     simulate_db_persons,
+    use_foo,
 )
 
 
@@ -62,11 +63,49 @@ class TestSimulateDBPersons(TestCase):
 
         self.assertEqual(len(simulate_db_persons()) + 1, len(add_person(temp)))
 
+    @skip
     def test_person_name_changed(self) -> None:
-        """tests wheteher personns name was changed"""
+        """test if name has changed"""
+        mock_data = "Harry, 42\n"
 
-        with open("database", encoding="utf-8") as file:
-            testliste = [_to_person(line) for line in file if _can_split(line)]
-            self.assertEqual(
-                [testliste, db_persons_change_name("Heinz", "Gustav")]
-            )
+        with patch("builtins.open", mock_open(read_data=mock_data)) as mock:
+            db_persons_change_name("Harry", "Potter")
+            mock_file = mock()
+            mock_file.writelines.assert_called_once_with(["Potter, 42\n"])
+
+
+    # @skip
+    def test_something(self) -> None:
+        mock_data = ["Harry, 42\n"]
+
+        with open("_mock_persons_db", "w", encoding="utf-8") as file:
+            file.writelines(mock_data)
+
+        with patch("server.DB_PATH", "_mock_persons_db"):
+            db_persons_change_name("Harry", "Potter")
+
+        with open("_mock_persons_db", encoding="utf-8") as file:
+            self.assertEqual(["Potter, 42\n"], file.readlines())
+
+
+
+class TestUseFoo(TestCase):
+    """test use_foo"""
+
+    def test_converts_to_float(self) -> None:
+        """..."""
+
+        with patch("server.foo") as mock:
+            mock.return_value = 42
+            result = use_foo(["", "", "", "", ""])
+            self.assertListEqual([42, 42, 42, 42, 42], result)
+
+    def test_converts_to_float_2(self) -> None:
+        """..."""
+
+        def mock_foo(bar: str) -> float:
+            return 42
+
+        with patch("server.foo", mock_foo):
+            result = use_foo(["", "", "", "", ""])
+            self.assertListEqual([42, 42, 42, 42, 42], result)

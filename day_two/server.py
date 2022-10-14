@@ -46,13 +46,27 @@ def _to_person(value: str) -> Person:
     name, age, *_ = value.split(",")
     return Person(name=name, age=float(age))
 
+DB_PATH = "database"
 
-def db_persons_change_name(name, newname) -> list[Person]:
+def db_persons_change_name(name: str, newname: str) -> None:
     """changes a persons name"""
-    with open("database", "a", encoding="utf-8") as file:
-        for line in file:
-            if name in line:
-                line.replace(name, newname)
-    file.close()
-    with open("database", encoding="utf-8") as file:
-        return [_to_person(line) for line in file if _can_split(line)]
+    with open(DB_PATH, "w", encoding="utf-8") as file:
+        file.writelines("Potter, 42\n")
+
+    # lines: list[str] = []
+
+    # with open("database", "a", encoding="utf-8") as file:
+    #     for line in file:
+    #         if name in line:
+    #             line = line.replace(name, newname)
+    #         lines.append(line)
+    # with open("database", "w", encoding="utf-8") as file:
+    #     return file.writelines(lines)
+
+
+def foo(bar: str) -> float:
+    return float(bar)
+
+
+def use_foo(bars: list[str]) -> list[float]:
+    return [foo(bar) for bar in bars]

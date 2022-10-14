@@ -73,7 +73,6 @@ class TestSimulateDBPersons(TestCase):
             mock_file = mock()
             mock_file.writelines.assert_called_once_with(["Potter, 42\n"])
 
-
     # @skip
     def test_something(self) -> None:
         mock_data = ["Harry, 42\n"]
@@ -86,7 +85,6 @@ class TestSimulateDBPersons(TestCase):
 
         with open("_mock_persons_db", encoding="utf-8") as file:
             self.assertEqual(["Potter, 42\n"], file.readlines())
-
 
 
 class TestUseFoo(TestCase):
